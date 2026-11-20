@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IELTS Reading Diagnostic</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📖%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b2030;--mu:#667;--ac:#2f5bea;--ok:#168a4a;--bad:#c62f3a;--bd:#dde1ec;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10131c;--card:#192030;--tx:#e8ebf5;--mu:#9aa3bb;--ac:#7b9bff;--ok:#4cc585;--bad:#ff7a84;--bd:#2c3550;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10131c;--card:#192030;--tx:#e8ebf5;--mu:#9aa3bb;--ac:#7b9bff;--ok:#4cc585;--bad:#ff7a84;--bd:#2c3550;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:0}h2{font-size:17px;margin:0 0 4px}
+.sub{color:var(--mu);font-size:14px;margin:2px 0 0}
+.bar{height:6px;background:var(--bd);border-radius:3px;margin:12px 0}.bar i{display:block;height:100%;background:var(--ac);border-radius:3px;width:0;transition:width .2s}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px}
+.tab{flex:none;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ac);color:#fff;border-color:var(--ac)}.tab.dn::after{content:" ✓"}
+.g{display:grid;gap:14px;grid-template-columns:1fr}@media(min-width:860px){.g{grid-template-columns:1fr 1fr;align-items:start}}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px}
+.q{margin:14px 0;padding-bottom:12px;border-bottom:1px solid var(--bd)}
+.opt{display:block;margin:4px 0;cursor:pointer}
+input[type=text],select{width:100%;max-width:340px;padding:8px;margin-top:6px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:10px 18px;font:inherit;cursor:pointer}.btn.s{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+.nav{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:14px}
+.ok{color:var(--ok)}.no{color:var(--bad)}.tip{font-size:14px;color:var(--mu)}
+.fb{font-size:14px;margin-top:4px}
+table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--bd)}
+svg{max-width:100%;height:auto}svg text{fill:var(--tx);font-size:12px}svg rect{fill:none;stroke:var(--tx)}
+#res{margin-bottom:14px}
+</style></head><body><div class="w">
+<h1>IELTS Reading Diagnostic</h1>
+<p class="sub">12 question types, 3 questions each. No timer: take as long as you need, then press Finish to see which types are your strongest and weakest.</p>
+<div class="bar"><i id="pb"></i></div>
+<div id="res"></div>
+<div class="tabs" id="tabs"></div>
+<div class="g"><div class="c" id="pas"></div><div class="c" id="qs"></div></div>
+</div>
+<script>
+const P={
+b:{t:"Urban beekeeping",l:1,x:["In the past decade, beekeeping has moved from the countryside to city rooftops. Hives now sit on offices, hotels and schools in many large cities.","One reason is the decline of wild pollinators. City gardens and parks offer a surprising variety of flowers, and, because cities use fewer pesticides than farms, bees often find them healthier places to live.","Keepers say the hobby is easier than expected. A beginner needs only one hive, a protective suit and a weekly inspection of about twenty minutes in summer. Most colonies produce more honey than a single family can eat.","However, critics warn that too many hives may compete with wild bees for food. Some researchers believe that cities should plant more flowers before allowing further hives.","Several councils have responded by offering free seed packs to residents who register their hives, hoping to keep both honey bees and wild species well fed."]},
+s:{t:"Early sound recording",x:["Édouard-Léon Scott built the phonautograph in 1857, a device that drew sound waves on paper but could not play them back. Thomas Edison went further in 1877 with a machine that recorded and replayed sound on tin foil. Emile Berliner introduced the flat disc in 1887, which was far easier to copy than Edison’s cylinders. Many experts argue that Edison’s invention was the real breakthrough, though Berliner’s design is the one that shaped the music industry. Today, recorded sound is mostly stored digitally."]},
+r:{t:"How paper is recycled",x:["First, used paper is collected and sorted by quality. It is then shredded and mixed with water to make a thick pulp. The pulp is passed through screens to remove staples and plastic. Next, ink is removed by washing the pulp with soap-like chemicals; this stage is called de-inking. The clean pulp is pressed between rollers to form thin sheets, which are heated until dry. Finally, the paper is wound onto large reels and cut to size."]},
+l:{t:"The city library",x:["The library has a single entrance on its south side. Straight ahead from the entrance is the reading room. The café is on the left of the entrance, and the computer lab is on the right of the entrance."]}};
+const TF=["True","False","Not given"],YN=["Yes","No","Not given"];
+const S=[
+{n:"Matching headings",p:"b",k:"sel",i:"Choose the correct heading for paragraphs B, C and D.",tip:"Find the main idea of the whole paragraph, not a single detail. One heading is not needed for these questions.",o:[["i","Concerns about competition"],["ii","A healthier environment for bees"],["iii","A simple, rewarding hobby"],["iv","The move to the rooftops"],["v","Action by local councils"]],q:[["Paragraph B","ii"],["Paragraph C","iii"],["Paragraph D","i"]]},
+{n:"Matching information",p:"b",k:"sel",i:"Which paragraph contains the following information? Letters may be used more than once.",tip:"Look for paraphrase of the idea, not the same words.",o:["A","B","C","D","E"].map(x=>[x,"Paragraph "+x]),q:[["A suggestion that more flowers should be planted before more hives are allowed","D"],["An estimate of how long weekly inspections take","C"],["A reason why cities may suit bees better than farms","B"]]},
+{n:"True / False / Not Given",p:"b",k:"tf",i:"Do the statements agree with the information in the passage?",tip:"False = the text says the opposite. Not Given = the text says nothing about it.",q:[["Beekeeping first began in cities.","False"],["Cities use less pesticide than farms.","True"],["Rooftop honey tastes better than countryside honey.","Not given"]]},
+{n:"Sentence completion",p:"b",k:"fill",i:"Complete the sentences. Write NO MORE THAN TWO WORDS.",tip:"Copy the words exactly from the text and check the grammar of the sentence.",q:[["A beginner needs one hive and a protective ____.",["suit"]],["Most colonies produce more ____ than one family can eat.",["honey"]],["Some councils give residents free ____ packs.",["seed","seeds"]]]},
+{n:"Short answer",p:"b",k:"fill",i:"Answer the questions. Write NO MORE THAN THREE WORDS.",tip:"Underline the question word (what, how long, who) to know what kind of answer is needed.",q:[["What may hives compete with wild bees for?",["food"]],["How long does a weekly summer inspection take?",["twenty minutes","20 minutes","about twenty minutes","about 20 minutes"]],["Who has offered free seeds to residents?",["councils","several councils","local councils"]]]},
+{n:"Matching names",p:"s",k:"sel",i:"Match each statement with the correct person.",tip:"Underline the names in the text first, then match the information around each name.",o:[["A","Édouard-Léon Scott"],["B","Thomas Edison"],["C","Emile Berliner"]],q:[["Created a device that could not play sound back","A"],["Introduced a format that was easy to copy","C"],["Made a machine that used tin foil","B"]]},
+{n:"Matching sentence endings",p:"s",k:"sel",i:"Choose the correct ending for each sentence. One ending is not needed.",tip:"Check both meaning and grammar. The ending must fit the sentence start.",o:[["A","play back the sounds it drew."],["B","it was far easier to copy than Edison’s cylinders."],["C","Edison’s invention was the real breakthrough."],["D","recorded sound is now mostly stored digitally."]],q:[["The phonautograph could not","A"],["Berliner’s disc was important because","B"],["Many experts argue that","C"]]},
+{n:"Yes / No / Not Given",p:"s",k:"yn",i:"Do the statements agree with the claims of the writer?",tip:"Yes/No is about the writer’s opinion or claim. Not Given = we cannot tell.",q:[["Edison’s machine improved on the phonautograph.","Yes"],["Scott’s device allowed people to listen to recordings.","No"],["Tin foil was a poor material for recording.","Not given"]]},
+{n:"Multiple choice",p:"s",k:"mc",i:"Choose the correct letter.",tip:"Cross out options that are clearly wrong, then compare the rest with the text.",q:[["What did Edison achieve in 1877?","B",["A. A machine that recorded sound on paper","B. A machine that recorded and replayed sound","C. The first flat disc"]],["Berliner’s discs were","A",["A. flat and easy to copy","B. made from tin foil","C. a type of cylinder"]],["According to the writer, Berliner’s design","A",["A. shaped the music industry","B. was invented before Edison’s machine","C. could not play sound back"]]]},
+{n:"Flow-chart completion",p:"r",k:"fill",i:"Complete the flow-chart steps. Write NO MORE THAN TWO WORDS.",tip:"Follow the order of the process in the text; answers come in the same order.",q:[["Shred the paper and mix it with ____ to make pulp.",["water"]],["Pass the pulp through ____ to remove staples and plastic.",["screens"]],["Press the clean pulp between ____ to form thin sheets.",["rollers"]]]},
+{n:"Summary completion",p:"r",k:"fill",i:"Complete the summary. Write NO MORE THAN TWO WORDS.",tip:"Read the whole summary first so you know what type of word is missing.",q:[["Used paper is sorted by ____ before it is shredded.",["quality"]],["The shredded paper is mixed with water to form a thick ____.",["pulp"]],["At the end of the process, the paper is wound onto large ____.",["reels"]]]},
+{n:"Labelling a diagram",p:"l",k:"sel",i:"Label the plan using the words below.",tip:"Find the starting point (the entrance) and follow the direction words: left, right, straight ahead.",svg:'<svg viewBox="0 0 300 190" role="img" aria-label="Library plan"><rect x="8" y="8" width="284" height="165"/><rect x="20" y="95" width="105" height="65"/><text x="68" y="132">1</text><rect x="175" y="95" width="105" height="65"/><text x="224" y="132">2</text><rect x="75" y="20" width="150" height="62"/><text x="147" y="55">3</text><text x="108" y="186">▲ Entrance</text></svg>',o:[["A","Café"],["B","Computer lab"],["C","Reading room"],["D","Storage room"]],q:[["Box 1","A"],["Box 2","B"],["Box 3","C"]]}];
+let cur=0,A={},fin=0,warn=0;const T=S.reduce((n,s)=>n+s.q.length,0);
+const $=i=>document.getElementById(i),esc=s=>String(s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+const K=(i,j)=>i+"_"+j,dn=i=>S[i].q.every((_,j)=>A[K(i,j)]);
+const norm=s=>s.toLowerCase().replace(/[^a-z0-9 ]/g," ").replace(/\b(the|a|an)\b/g," ").replace(/\s+/g," ").trim();
+function ok(i,j){const s=S[i],a=s.q[j][1],v=A[K(i,j)]||"";return s.k=="fill"?a.some(x=>norm(x)==norm(v)):v==a}
+function prog(){const n=Object.values(A).filter(Boolean).length;$("pb").style.width=n/T*100+"%";$("tabs").innerHTML=S.map((s,i)=>`<button class="tab${i==cur?" on":""}${dn(i)?" dn":""}" data-t="${i}">${i+1}. ${s.n}</button>`).join("")}
+function qh(s,i,j){const[t,a,o]=s.q[j],id=K(i,j),v=A[id]||"";let h=`<div class="q"><div><b>${j+1}.</b> ${t}</div>`;
+if(s.k=="tf"||s.k=="yn")(s.k=="tf"?TF:YN).forEach(x=>h+=`<label class="opt"><input type="radio" name="${id}" value="${x}"${v==x?" checked":""}> ${x}</label>`);
+else if(s.k=="mc")o.forEach(x=>h+=`<label class="opt"><input type="radio" name="${id}" value="${x[0]}"${v==x[0]?" checked":""}> ${x}</label>`);
+else if(s.k=="sel")h+=`<select data-id="${id}"><option value="">Choose…</option>`+s.o.map(x=>`<option value="${x[0]}"${v==x[0]?" selected":""}>${x[0]}. ${x[1]}</option>`).join("")+"</select>";
+else h+=`<input type="text" data-id="${id}" value="${esc(v)}" autocomplete="off" autocapitalize="off">`;
+if(fin){const c=s.k=="fill"?a[0]:a,sh=s.k=="sel"?c+". "+s.o.find(x=>x[0]==c)[1]:c;h+=ok(i,j)?'<div class="fb ok">✓ Correct</div>':`<div class="fb no">✗ Correct answer: ${sh}</div>`}
+return h+"</div>"}
+function show(i){cur=i;const s=S[i],p=P[s.p];
+$("pas").innerHTML=`<h2>${p.t}</h2><p class="tip">Passage for section ${i+1}</p>`+p.x.map((t,k)=>`<p>${p.l?`<b>${"ABCDE"[k]}</b> `:""}${t}</p>`).join("");
+$("qs").innerHTML=`<h2>${i+1}. ${s.n}</h2><p>${s.i}</p><p class="tip">Tip: ${s.tip}</p>${s.svg||""}${s.q.map((_,j)=>qh(s,i,j)).join("")}<div class="nav"><button class="btn s" data-n="-1"${i?"":" disabled"}>← Back</button>${i<S.length-1?'<button class="btn" data-n="1">Next →</button>':`<button class="btn" id="fin">${fin?"See results":"Finish and check"}</button>`}</div><p class="tip" id="wn"></p>`;prog()}
+function results(){fin=1;let tot=0,rows="",weak=[];S.forEach((s,i)=>{const n=s.q.filter((_,j)=>ok(i,j)).length,p=n/s.q.length*100;tot+=n;if(p<50)weak.push(s.n);rows+=`<tr><td>${s.n}</td><td>${n}/${s.q.length}</td><td class="${p>=80?"ok":p<50?"no":""}">${p>=80?"Strong":p>=50?"Developing":"Needs work"}</td></tr>`});
+$("res").innerHTML=`<div class="c"><h2>Score: ${tot}/${T}</h2><table><tr><th>Question type</th><th>Score</th><th>Level</th></tr>${rows}</table><p>${weak.length?"<b>Practise first:</b> "+weak.join(", ")+".":"No weak types. Keep practising under exam conditions."}</p><button class="btn s" id="rs">Start again</button> <span class="tip">Open any section to review your answers.</span></div>`;show(cur);window.scrollTo(0,0)}
+document.addEventListener("click",e=>{const t=e.target;
+if(t.dataset.t!==undefined)show(+t.dataset.t);
+else if(t.dataset.n)show(cur+ +t.dataset.n);
+else if(t.id=="fin"){const m=T-Object.values(A).filter(Boolean).length;if(m&&!fin&&!warn){warn=1;$("wn").textContent=m+" question(s) unanswered. Press the button again to finish anyway.";return}results()}
+else if(t.id=="rs"){A={};fin=0;warn=0;$("res").innerHTML="";show(0)}});
+["input","change"].forEach(ev=>document.addEventListener(ev,e=>{const id=e.target.name||e.target.dataset.id;if(id&&!fin){A[id]=e.target.value.trim();warn=0;prog()}}));
+show(0);
+</script></body></html>
